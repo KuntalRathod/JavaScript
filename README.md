@@ -1,1 +1,1 @@
-# Basics_Of_JavaScript
+# JavaScript🚀
