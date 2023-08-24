@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XMLHttpRequest</title>
+    <style>
+
+        #imageContainer {
+            width: 300px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        #image {
+            width: 100%;
+            height: auto;
+        }
+
+        #follower {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        #loadImageButton {
+            margin-top: 1em;
+            padding: 0.5em 1em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #fff;
+            color: #333;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #loadImageButton:hover {
+            background-color: #333;
+            color: #fff;
+        }
+    </style>
+</head>
+<body style="background-color: #414141;color:aliceblue">
+  
+     <!-- Value State Description
+    0 UNSENT Client has been created. open() not called yet.
+    1 OPENED open() has been called.
+    2 HEADERS_RECEIVED send() has been called, and headers and status are available.
+    3 LOADING Downloading; responseText holds partial data.
+    4 DONE The operation is complete. -->
+
+<div id="imageContainer">
+    <h1> My Github Profile  </h1>
+    <img id="image" src=""> 
+    <p id="follower"></p>
+    <button id="loadImageButton">Load Image</button>
+</div>
+
+</body>
+<script>
+
+    const API_URL = 'https://api.github.com/users/Vatsallila';
+
+      // Get the image element
+        const imageElement = document.getElementById('image');
+        const loadImageButton = document.getElementById('loadImageButton');
+        const followerElement = document.getElementById('follower');
+
+        // Add a click event listener to the button
+            loadImageButton.addEventListener('click', function () {
+                // Create a new XMLHttpRequest
+                const xhr = new XMLHttpRequest();
+
+                // Configure the request
+                xhr.open('GET', API_URL, true);
+
+                // Set up a load event listener
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+
+                        // Parse the response JSON
+                        const data = JSON.parse(xhr.responseText);
+
+                        // Assuming the API response has a 'url' property containing the image URL
+                        const imageUrl = data.avatar_url;
+                        const follower = data.followers;
+
+                        // Set the src attribute of the image element to display the image
+                        imageElement.src = imageUrl;
+                        followerElement.innerHTML = follower;
+
+                           // Hide the button
+                        loadImageButton.style.display = 'none';
+                        
+                    } else {
+                        console.error('Request failed with status:', xhr.status);
+                    }
+                };
+                // Set up an error event listener
+                xhr.onerror = function () {
+                    console.error('Request error.');
+                };
+                // Send the request
+                xhr.send();
+            });
+
+/*
+
+    const reqUrl = 'https://api.github.com/users/kuntalrathod';
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET',reqUrl);
+    xhr.onreadystatechange = function(){
+            console.log(xhr.readyState);
+            if(xhr.readyState===4){
+                const data = JSON.parse(this.responseText);
+                console.log(data)
+                console.log(data.followers)
+                console.log(data.avatar_url)
+            }
+    }
+    console.log("HERE")
+    xhr.send()
+
+*/ 
+
+
+</script>
+</html>
